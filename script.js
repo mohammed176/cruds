@@ -8,8 +8,13 @@ let count = document.getElementById("count");
 let category = document.getElementById("category");
 let create = document.getElementById("create");
 let table = document.querySelector("tbody");
+let search = document.getElementById("search");
+let sCategory = document.getElementById("sCategory");
+let tCategory = document.getElementById("tCategory");
 
 let mode = "create"; 
+let searchMode = "title";
+
 let tmp; 
 
 let products = localStorage.getItem("products") 
@@ -22,7 +27,12 @@ function getTotal(){
         total.innerText = result;
     } else {
         total.innerText = 0;
+        alert("Please enter a price");
+        adds.value = ""
+        tax.value = ""
+        discount.value = ""
     }
+    
 }
 
 
@@ -50,25 +60,28 @@ create.addEventListener("click", () => {
         count: count.value,
         category: category.value,
     };
+    if(title.value != "" && price.value != "" && category.value != "" && count.value <= 100){
+        if(mode === "create"){
 
-    if(mode === "create"){
-
-        if (+newProduct.count > 1) {
-            for (let x = 0; x < +newProduct.count; x++) {
+            if (+newProduct.count > 1) {
+                for (let x = 0; x < +newProduct.count; x++) {
+                    products.push(newProduct);
+                }
+            } else {
                 products.push(newProduct);
             }
-        } else {
-            products.push(newProduct);
+        } else { 
+            products[tmp] = newProduct;
+            mode = "create";
+            create.innerHTML = "Create";
+            count.style.display = "block";
+            clearData();
         }
-    } else { 
-        products[tmp] = newProduct;
-        mode = "create";
-        create.innerHTML = "Create";
-        count.style.display = "block";
     }
+    
 
     localStorage.setItem("products", JSON.stringify(products));
-    clearData();
+    
     addData();
 });
 
@@ -101,6 +114,7 @@ function addData(){
     }
 }
 
+addData();
 
 function deleteProduct(i){
     products.splice(i, 1);
@@ -125,7 +139,6 @@ function updateData(i){
     getTotal();
     count.style.display = "none";
     category.value = products[i].category;
-
     create.innerHTML = "Update";
     mode = "update";
     tmp = i;
@@ -135,5 +148,62 @@ function updateData(i){
     })
 }
 
+function getSearch(id) {
+    if (id === "sTitle") {
+        searchMode = "title";
+    } else {
+        searchMode = "category";
+    }
+    search.focus();
+    search.setAttribute("placeholder",`search by ${searchMode}`);
+    search.value = "";
+    addData()
+}
 
-addData();
+function searchData(value) {
+    let tableElements = ""; 
+    let searchValue = value.toLowerCase(); // حول قيمة البحث لأحرف صغيرة
+
+    if (searchMode === "title") {
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].title.toLowerCase().includes(searchValue)) { 
+                tableElements += `
+                <tr>
+                    <th>${i + 1}</th>
+                    <th>${products[i].title}</th>
+                    <th>${products[i].price}</th>
+                    <th>${products[i].tax}</th>
+                    <th>${products[i].adds}</th>
+                    <th>${products[i].discount}</th>
+                    <th>${products[i].total}</th>
+                    <th>${products[i].category}</th>
+                    <th><button onclick="updateData(${i})">Update</button></th>
+                    <th><button onclick="deleteProduct(${i})">Delete</button></th>
+                </tr>
+                `;
+            }
+        }
+    } else {
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].category.toLowerCase().includes(searchValue)) { 
+                tableElements += `
+                <tr>
+                    <th>${i + 1}</th>
+                    <th>${products[i].title}</th>
+                    <th>${products[i].price}</th>
+                    <th>${products[i].tax}</th>
+                    <th>${products[i].adds}</th>
+                    <th>${products[i].discount}</th>
+                    <th>${products[i].total}</th>
+                    <th>${products[i].category}</th>
+                    <th><button onclick="updateData(${i})">Update</button></th>
+                    <th><button onclick="deleteProduct(${i})">Delete</button></th>
+                </tr>
+                `;
+            }
+        }
+    }
+
+    table.innerHTML = tableElements;
+}
+
