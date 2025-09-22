@@ -50,6 +50,7 @@ function clearData(){
 
 
 create.addEventListener("click", () => {
+
     let newProduct = {
         title: title.value,
         price: price.value,
@@ -83,6 +84,7 @@ create.addEventListener("click", () => {
     localStorage.setItem("products", JSON.stringify(products));
     
     addData();
+    clearData();
 });
 
 
@@ -162,7 +164,7 @@ function getSearch(id) {
 
 function searchData(value) {
     let tableElements = ""; 
-    let searchValue = value.toLowerCase(); // حول قيمة البحث لأحرف صغيرة
+    let searchValue = value.toLowerCase(); 
 
     if (searchMode === "title") {
         for (let i = 0; i < products.length; i++) {
