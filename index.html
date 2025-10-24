@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRUDS</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -16,10 +15,10 @@
         <div class="inputs">
             <input type="text" placeholder="Name" id="title">
             <div class="prices">
-                <input min="0" onkeyup="getTotal()" type="number" id="price" placeholder="price">
-                <input min="0" onkeyup="getTotal()" type="number" id="tax" placeholder="tax">
-                <input min="0" onkeyup="getTotal()" type="number" id="adds" placeholder="adds">
-                <input min="0" onkeyup="getTotal()" type="number" id="discount" placeholder="discount" >
+                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="price" placeholder="price">
+                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="tax" placeholder="tax">
+                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="adds" placeholder="adds">
+                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="discount" placeholder="discount" >
                 <span id="total">0</span>
             </div>
             <input type="number" placeholder="count" id="count">
@@ -28,7 +27,7 @@
         </div>
         <div class="outputs">
             <div class="searchBlock">
-                <input onkeyup="searchData(this.value)" type="text" placeholder="search by title" id="search">
+                <input onkeyup="searchData(this.value)" type="text" placeholder="search" id="search" disabled>
                 <div class="btnSearch">
                     <button onclick="getSearch(this.id)" id="sCategory">search by category</button>
                     <button onclick="getSearch(this.id)" id="sTitle">search by title</button>

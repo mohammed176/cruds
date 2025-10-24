@@ -27,10 +27,10 @@ function getTotal(){
         total.innerText = result;
     } else {
         total.innerText = 0;
-        alert("Please enter a price");
         adds.value = ""
         tax.value = ""
         discount.value = ""
+        count.value = ""
     }
     
 }
@@ -63,7 +63,6 @@ create.addEventListener("click", () => {
     };
     if(title.value != "" && price.value != "" && category.value != "" && count.value <= 100){
         if(mode === "create"){
-
             if (+newProduct.count > 1) {
                 for (let x = 0; x < +newProduct.count; x++) {
                     products.push(newProduct);
@@ -153,8 +152,10 @@ function updateData(i){
 function getSearch(id) {
     if (id === "sTitle") {
         searchMode = "title";
+        search.removeAttribute("disabled");
     } else {
         searchMode = "category";
+        search.removeAttribute("disabled");
     }
     search.focus();
     search.setAttribute("placeholder",`search by ${searchMode}`);
@@ -208,4 +209,3 @@ function searchData(value) {
 
     table.innerHTML = tableElements;
 }
-
