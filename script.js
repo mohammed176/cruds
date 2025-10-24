@@ -30,7 +30,6 @@ function getTotal(){
         adds.value = ""
         tax.value = ""
         discount.value = ""
-        count.value = ""
     }
     
 }
@@ -63,6 +62,7 @@ create.addEventListener("click", () => {
     };
     if(title.value != "" && price.value != "" && category.value != "" && count.value <= 100){
         if(mode === "create"){
+
             if (+newProduct.count > 1) {
                 for (let x = 0; x < +newProduct.count; x++) {
                     products.push(newProduct);
@@ -209,3 +209,4 @@ function searchData(value) {
 
     table.innerHTML = tableElements;
 }
+
