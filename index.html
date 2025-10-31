@@ -3,58 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUDS</title>
+    <title data-lang-key="nav-brand">CRUD Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+
+    <div id="alertsContainer"></div>
+    
+    <div id="login-container" style="display: none;">
+        <form id="login-form">
+            <h2 data-lang-key="login-title">Login</h2>
+            <input type="text" id="username" placeholder="Username" data-lang-key="ph-username" required>
+            <input type="password" id="password" placeholder="Password" data-lang-key="ph-password" required>
+            <p id="login-error" class="error-message"></p>
+            <button type="submit" data-lang-key="login-btn">Login</button>
+            <a href="#" id="show-create-account" data-lang-key="show-create-account">Don't have an account? Create one</a>
+        </form>
+    </div>
+
+    <div id="create-account-container" style="display: none;">
+        <form id="create-account-form">
+            <h2 data-lang-key="create-account-title">Create Account</h2>
+            <input type="text" id="new-username" placeholder="Username" data-lang-key="ph-username" required>
+            <input type="password" id="new-password" placeholder="Password" data-lang-key="ph-password" required>
+            <input type="password" id="confirm-password" placeholder="Confirm Password" data-lang-key="ph-confirm-password" required>
+            <p id="create-account-error" class="error-message"></p>
+            <button type="submit" data-lang-key="create-account-btn">Create Account</button>
+            <a href="#" id="show-login" data-lang-key="show-login">Already have an account? Login</a>
+        </form>
+    </div>
+
+    <div class="container" style="display: none;">
+
+        <nav>
+            <div class="nav-brand" data-lang-key="nav-brand">CRUD App</div>
+            <div class="nav-controls">
+                <div id="welcome-message">Welcome, User!</div>
+                <button id="theme-toggle" title="Toggle Theme">🌙</button>
+                <button id="lang-toggle" data-lang-key="lang-toggle-en">العربية</button>
+                <button id="logout-button" data-lang-key="logout-btn">Logout</button>
+            </div>
+        </nav>
+
         <div class="head">
-            <h2>CRUD</h2>
-            <p>Create Read Update Delete</p>
+            <h2 data-lang-key="crud-title">CRUD</h2>
+            <p data-lang-key="crud-subtitle">Create Read Update Delete</p>
         </div>
+
         <div class="inputs">
-            <input type="text" placeholder="Name" id="title">
+            
+            <input type="text" data-lang-key="ph-name" placeholder="Name" id="title" required>
+            
+            <div class="image-upload-container">
+                <input type="file" id="image" accept="image/*">
+                <label for="image" class="file-label" data-lang-key="btn-upload-image">
+                    <i class='fa-solid fa-upload'></i> Upload Image
+                </label>
+                <img id="img-preview" src="" alt="Image Preview" style="display: none;">
+            </div>
+
             <div class="prices">
-                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="price" placeholder="price">
-                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="tax" placeholder="tax">
-                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="adds" placeholder="adds">
-                <input min="0" onkeyup="getTotal()" onmousedown="getTotal()" type="number" id="discount" placeholder="discount" >
+                <input min="0" onkeyup="getTotal()" onmouseup="getTotal()" type="number" id="price" data-lang-key="ph-price" placeholder="Price" required>
+                <input min="0" onkeyup="getTotal()" onmouseup="getTotal()" type="number" id="tax" data-lang-key="ph-tax" placeholder="Tax">
+                <input min="0" onkeyup="getTotal()" onmouseup="getTotal()" type="number" id="adds" data-lang-key="ph-adds" placeholder="Adds">
+                <input min="0" onkeyup="getTotal()" onmouseup="getTotal()" type="number" id="discount" data-lang-key="ph-discount" placeholder="Discount">
                 <span id="total">0</span>
             </div>
-            <input type="number" placeholder="count" id="count">
-            <input type="text" placeholder="category" id="category">
-            <button type="button" id="create">Create</button>
+            <input type="number" data-lang-key="ph-count" placeholder="Count" id="count" value="1" min="1" max="100">
+            <input type="text" data-lang-key="ph-category" placeholder="Category" id="category" required>
+            <button type="button" id="create" data-lang-key="btn-create">Create</button>
         </div>
+
         <div class="outputs">
             <div class="searchBlock">
-                <input onkeyup="searchData(this.value)" type="text" placeholder="search" id="search" disabled>
+                <input onkeyup="searchData(this.value)" type="text" data-lang-key="ph-search" placeholder="Search" id="search" disabled>
                 <div class="btnSearch">
-                    <button onclick="getSearch(this.id)" id="sCategory">search by category</button>
-                    <button onclick="getSearch(this.id)" id="sTitle">search by title</button>
+                    <button onclick="getSearch(this.id)" id="sCategory" data-lang-key="btn-s-category">Search by Category</button>
+                    <button onclick="getSearch(this.id)" id="sTitle" data-lang-key="btn-s-title">Search by Title</button>
                 </div>
-                <div id="delete_all"></div>
+                <div id="delete_all" data-lang-key="btn-delete-all"></div>
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>title</th>
-                            <th>prices</th>
-                            <th>taxes</th>
-                            <th>adds</th>
-                            <th>discount</th>
-                            <th>total</th>
-                            <th>category</th>
-                            <th>update</th>
-                            <th>delete</th>
+                            <th data-lang-key="th-id">ID</th>
+                            <th data-lang-key="th-image">Image</th>
+                            <th data-lang-key="th-title">Title</th>
+                            <th data-lang-key="th-price">Price</th>
+                            <th data-lang-key="th-tax">Tax</th>
+                            <th data-lang-key="th-adds">Adds</th>
+                            <th data-lang-key="th-discount">Discount</th>
+                            <th data-lang-key="th-total">Total</th>
+                            <th data-lang-key="th-category">Category</th>
+                            <th data-lang-key="th-update">Update</th>
+                            <th data-lang-key="th-delete">Delete</th>
                         </tr>
                     </thead>
-                    <tbody>
-
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

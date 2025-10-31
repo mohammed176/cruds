@@ -1,9 +1,71 @@
+/* ================== CSS VARIABLES ================== */
+:root {
+    /* Light Mode */
+    --bg-gradient: linear-gradient(135deg, #e0eafc, #cfdef3);
+    --text-color: #333;
+    --header-color: #0056b3;
+    --header-shadow: rgba(0, 86, 179, 0.3);
+    --input-bg: #ffffff;
+    --input-focus-bg: #f0f8ff;
+    --input-shadow: #007bff;
+    --btn-gradient: linear-gradient(135deg, #007bff, #0056b3);
+    --btn-hover-scale: 1.03;
+    --btn-color: #ffffff;
+    --btn-shadow: rgba(0, 123, 255, 0.3);
+    --btn-hover-shadow: rgba(0, 123, 255, 0.5);
+    --table-bg: #ffffff;
+    --table-shadow: rgba(0, 0, 0, 0.1);
+    --table-header-bg: #f0f8ff;
+    --table-border: #d0d0d0;
+    --table-text: #555;
+    --btn-update-gradient: linear-gradient(135deg, #28a745, #218838);
+    --btn-update-hover: linear-gradient(135deg, #218838, #1e7e34);
+    --btn-delete-all-bg: #dc3545;
+    --btn-delete-all-hover: #c82333;
+    --btn-delete-shadow: rgba(220, 53, 69, 0.5);
+    --login-bg: #ffffff;
+    --login-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --login-error: #dc3545;
+    --login-link-color: #007bff;
+    --nav-bg: var(--table-header-bg);
+}
+
+body.dark-mode {
+    /* Dark Mode (Your original theme) */
+    --bg-gradient: linear-gradient(135deg, #0a0a23, #001233);
+    --text-color: #e0e0e0;
+    --header-color: #00bfff;
+    --header-shadow: rgba(0, 191, 255, 0.5);
+    --input-bg: #001f3f;
+    --input-focus-bg: #003366;
+    --input-shadow: #00bfff;
+    --btn-gradient: linear-gradient(135deg, #001f3f, #004080);
+    --btn-hover-scale: 1.05;
+    --btn-color: #00bfff;
+    --btn-shadow: rgba(0, 191, 255, 0.3);
+    --btn-hover-shadow: rgba(0, 191, 255, 0.5);
+    --table-bg: #001f3f;
+    --table-shadow: rgba(0, 0, 0, 0.7);
+    --table-header-bg: #003366;
+    --table-border: #004080;
+    --table-text: #c0e0ff;
+    --btn-update-gradient: linear-gradient(135deg, #004080, #0073e6);
+    --btn-update-hover: linear-gradient(135deg, #0073e6, #00bfff);
+    --btn-delete-all-bg: #ff4d4d;
+    --btn-delete-all-hover: #ff6666;
+    --btn-delete-shadow: rgba(255, 102, 102, 0.5);
+    --login-bg: #001f3f;
+    --login-shadow: 0 10px 30px rgba(0, 191, 255, 0.2);
+    --login-error: #ff6666;
+    --login-link-color: #00bfff;
+    --nav-bg: var(--table-header-bg);
+}
+
 /* ================== RESET ================== */
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-transform: capitalize;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -12,12 +74,118 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(135deg, #0a0a23, #001233); /* dark navy gradient */
-    color: #e0e0e0;
+    justify-content: center;
+    background: var(--bg-gradient);
+    color: var(--text-color);
     min-height: 100vh;
     padding: 20px;
     transition: all 0.3s ease;
 }
+
+/* ================== RTL SUPPORT FOR ARABIC ================== */
+body[dir="rtl"] {
+    text-align: right;
+}
+body[dir="rtl"] .nav-controls {
+    /* Reverse order of controls */
+    flex-direction: row-reverse;
+}
+body[dir="rtl"] .nav-brand {
+    /* Ensure brand is on the right */
+    margin-left: auto;
+    margin-right: 0;
+}
+body[dir="rtl"] .prices {
+    /* Ensure numbers are LTR for better number input UX */
+    direction: ltr;
+}
+body[dir="rtl"] .image-upload-container {
+    /* Reverse order of image upload and label */
+    flex-direction: row-reverse;
+}
+body[dir="rtl"] .file-label {
+    /* Ensure text within the label is RTL */
+    direction: rtl;
+}
+
+/* Alert positioning for RTL */
+body[dir="rtl"] #alertsContainer {
+    right: 20px;
+    left: auto;
+}
+body[dir="rtl"] .alert {
+    transform: translateX(120%);
+    border-right: 6px solid;
+    border-left: none;
+}
+body[dir="rtl"] .alert.show {
+    transform: translateX(0);
+}
+body[dir="rtl"] .alert .closeIcon {
+    left: 15px;
+    right: auto;
+}
+/* Alert border colors */
+body[dir="rtl"] .success { border-right-color: #22c55e; border-left: none;}
+body[dir="rtl"] .danger { border-right-color: #ef4444; border-left: none;}
+body[dir="rtl"] .warning { border-right-color: #eab308; border-left: none;}
+body[dir="rtl"] .info { border-right-color: #3b82f6; border-left: none;}
+
+/* Fix for numbers/password fields that should be LTR */
+body[dir="rtl"] input[type="number"], 
+body[dir="rtl"] input[type="password"] {
+    direction: ltr;
+    text-align: right; /* Revert text alignment for better number display */
+}
+
+/* ================== LOGIN & CREATE ACCOUNT ================== */
+#login-container, #create-account-container {
+    background: var(--login-bg);
+    padding: 2.5rem 3rem;
+    border-radius: 15px;
+    box-shadow: var(--login-shadow);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+#login-form h2, #create-account-form h2 {
+    color: var(--header-color);
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+#login-form input, #create-account-form input {
+    margin: 0.7rem 0;
+    text-align: inherit;
+}
+
+/* Style for error messages in forms */
+.error-message {
+    color: var(--login-error);
+    margin-top: 1rem;
+    height: 1.2em;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#login-form button, #create-account-form button {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+#login-container a, #create-account-container a {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--login-link-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+#login-container a:hover, #create-account-container a:hover {
+    text-decoration: underline;
+}
+
 
 /* ================== CONTAINER ================== */
 .container{
@@ -26,19 +194,70 @@ body{
     max-width: 1200px;
 }
 
+/* ================== NAVBAR ================== */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--nav-bg);
+    padding: 10px 25px;
+    border-radius: 50px;
+    margin-bottom: 25px;
+    box-shadow: var(--table-shadow);
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--header-color);
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#welcome-message {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-right: 10px;
+    white-space: nowrap;
+}
+body[dir="rtl"] #welcome-message {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+.nav-controls button {
+    width: auto;
+    padding: 10px 15px;
+    font-size: 14px;
+    flex-grow: 0;
+    margin: 0; /* Override default button margin */
+}
+
+#theme-toggle {
+    font-size: 20px;
+    padding: 5px 12px;
+}
+
 /* ================== HEADER ================== */
 .head h2{
     font-size: 60px;
     margin-bottom: 10px;
-    color: #00bfff; /* neon blue */
-    text-shadow: 2px 2px 8px rgba(0,191,255,0.5);
+    color: var(--header-color);
+    text-shadow: 2px 2px 8px var(--header-shadow);
 }
 
 .head p{
     font-size: 36px;
     margin-bottom: 20px;
-    color: #a0cfff;
+    color: var(--text-color);
+    opacity: 0.8;
 }
+
 
 /* ================== INPUTS ================== */
 input{
@@ -46,19 +265,67 @@ input{
     height: 45px;
     outline: none;
     border: none;
-    background-color: #001f3f; /* dark navy input */
+    background-color: var(--input-bg);
     margin: 6px 0;
     border-radius: 50px;
     padding: 12px 20px;
-    color: #e0e0e0;
+    color: var(--text-color);
     font-size: 16px;
     transition: all 0.3s ease;
+    border: 1px solid transparent;
 }
 
 input:focus{
-    background-color: #003366;
-    box-shadow: 0 0 12px #00bfff;
+    background-color: var(--input-focus-bg);
+    box-shadow: 0 0 12px var(--input-shadow);
+    border-color: var(--input-shadow);
 }
+
+/* ================== IMAGE UPLOAD ================== */
+.image-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+    width: 100%;
+}
+/* Hide default file input */
+input[type="file"] {
+    display: none;
+}
+/* Style the custom label */
+.file-label {
+    /* تم التعديل هنا: flex-grow: 1 بدلاً من flex-basis: 200px; */
+    flex-grow: 1; /* يضمن أن الزر يأخذ كامل المساحة المتبقية */
+    flex-shrink: 0;
+    height: 45px;
+    background: var(--btn-gradient);
+    color: var(--btn-color);
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px var(--btn-shadow);
+}
+.file-label:hover {
+    transform: scale(var(--btn-hover-scale));
+    box-shadow: 0 6px 20px var(--btn-hover-shadow);
+}
+#img-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: var(--input-bg);
+    border: 2px solid var(--table-border);
+}
+
 
 /* ================== PRICES SECTION ================== */
 .prices{
@@ -77,15 +344,14 @@ input:focus{
     height: 45px;
     outline: none;
     border: none;
-    background-color: #001f3f;
+    background-color: var(--input-bg);
     margin: 6px 0;
     border-radius: 50px;
     padding: 12px 20px;
-    color: #e0e0e0;
+    color: var(--text-color);
     font-size: 16px;
-}
-#total:focus{
-    box-shadow: 0 0 12px #00bfff;
+    display: inline-block;
+    line-height: 21px;
 }
 
 /* ================== BUTTONS ================== */
@@ -94,21 +360,21 @@ button{
     height: 45px;
     outline: none;
     border: none;
-    background: linear-gradient(135deg, #001f3f, #004080); /* navy gradient */
+    background: var(--btn-gradient);
     margin: 6px 0;
     border-radius: 50px;
     padding: 12px 20px;
-    color: #00bfff;
+    color: var(--btn-color);
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,191,255,0.3);
+    box-shadow: 0 4px 10px var(--btn-shadow);
 }
 
 button:hover{
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0,191,255,0.5);
+    transform: scale(var(--btn-hover-scale));
+    box-shadow: 0 6px 20px var(--btn-hover-shadow);
 }
 
 /* ================== SEARCH BUTTONS ================== */
@@ -127,27 +393,29 @@ table{
     width: 100%;
     border-collapse: collapse;
     margin: 15px 0;
-    background-color: #001f3f;
+    background-color: var(--table-bg);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.7);
+    box-shadow: 0 5px 20px var(--table-shadow);
 }
 
 th, td{
     padding: 12px 10px;
     text-align: center;
-    border-bottom: 1px solid #004080;
-    color: #c0e0ff;
+    border-bottom: 1px solid var(--table-border);
+    color: var(--table-text);
     font-size: 16px;
+    vertical-align: middle;
 }
 
 th{
-    background-color: #003366;
+    background-color: var(--table-header-bg);
     font-size: 16px;
+    color: var(--header-color);
 }
 
 td button{
-    background: linear-gradient(135deg, #004080, #0073e6);
+    background: var(--btn-update-gradient);
     border-radius: 30px;
     padding: 6px 12px;
     font-size: 14px;
@@ -156,9 +424,18 @@ td button{
 }
 
 td button:hover{
-    background: linear-gradient(135deg, #0073e6, #00bfff);
+    background: var(--btn-update-hover);
     transform: scale(1.1);
-    box-shadow: 0 3px 10px rgba(0,191,255,0.5);
+    box-shadow: 0 3px 10px var(--btn-hover-shadow);
+}
+
+/* Table Image */
+table tbody img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--table-border);
 }
 
 /* ================== DELETE ALL BUTTON ================== */
@@ -167,14 +444,101 @@ td button:hover{
 }
 
 #delete_all button{
-    background-color: #ff4d4d; /* red for delete */
+    background-color: var(--btn-delete-all-bg);
 }
 
 #delete_all button:hover{
-    background-color: #ff6666;
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(255,102,102,0.5);
+    background-color: var(--btn-delete-all-hover);
+    transform: scale(var(--btn-hover-scale));
+    box-shadow: 0 4px 15px var(--btn-delete-shadow);
 }
+
+/* ================== ALERTS SYSTEM ================== */
+#alertsContainer {
+    position: fixed;
+    top: 20px;
+    /* Default is LTR */
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 9999;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    min-width: 320px;
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    /* Default LTR: slides from left */
+    transform: translateX(-120%);
+    opacity: 0;
+    transition: all 0.6s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.alert.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.alert .sign i {
+    font-size: 22px;
+    background: rgba(255,255,255,0.15);
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.alert .closeIcon {
+    /* Default LTR: positioned to the right */
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #ddd;
+    transition: 0.3s;
+}
+
+.alert .closeIcon:hover {
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.alert .msg {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Alert Colors (using border-left) */
+.success {
+    background: rgba(34,197,94,0.15);
+    border-left: 6px solid #22c55e;
+    color: #bbf7d0;
+}
+.danger {
+    background: rgba(239,68,68,0.15);
+    border-left: 6px solid #ef4444;
+    color: #fecaca;
+}
+.warning {
+    background: rgba(234,179,8,0.15);
+    border-left: 6px solid #eab308;
+    color: #fef08a;
+}
+.info {
+    background: rgba(59,130,246,0.15);
+    border-left: 6px solid #3b82f6;
+    color: #bfdbfe;
+}
+
 
 /* ================== RESPONSIVE ================== */
 @media screen and (max-width: 1024px){
@@ -182,7 +546,7 @@ td button:hover{
         flex-wrap: wrap;
         gap: 8px;
     }
-    .prices input{
+    .prices input, #total {
         width: 48%;
         margin-bottom: 8px;
     }
@@ -205,11 +569,16 @@ td button:hover{
 }
 
 @media screen and (max-width: 768px){
+    nav {
+        flex-direction: column;
+        gap: 15px;
+        border-radius: 20px;
+    }
     .prices{
         flex-direction: column;
         gap: 6px;
     }
-    .prices input{
+    .prices input, #total {
         width: 100%;
     }
     .head h2{
@@ -226,11 +595,48 @@ td button:hover{
         padding: 4px 8px;
         font-size: 12px;
     }
+    .image-upload-container {
+        flex-direction: column;
+    }
+    .file-label {
+        width: 100%;
+    }
+    #img-preview {
+        margin-top: 10px;
+    }
 }
 
 @media screen and (max-width: 480px){
     body{
         padding: 10px;
+    }
+    #login-container, #create-account-container {
+        padding: 1.5rem;
+    }
+    nav {
+        padding: 15px;
+    }
+    .nav-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .nav-brand {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .nav-controls {
+        flex-direction: row; 
+    }
+    body[dir="rtl"] .nav-controls {
+        flex-direction: row-reverse; 
+    }
+    #welcome-message {
+        width: 100%;
+        text-align: center;
+        margin-right: 0;
+        margin-left: 0;
+        margin-bottom: 10px;
     }
     .head h2{
         font-size: 28px;
@@ -242,7 +648,7 @@ td button:hover{
         height: 40px;
         padding: 10px 16px;
     }
-    .prices input, .btnSearch button{
+    .prices input, .btnSearch button, #total {
         width: 100%;
     }
     table th, table td{
@@ -252,5 +658,10 @@ td button:hover{
     td button{
         padding: 3px 6px;
         font-size: 11px;
+    }
+    /* Alert responsive */
+    .alert {
+        min-width: 280px;
+        padding: 12px 20px;
     }
 }
