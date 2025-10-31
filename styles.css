@@ -353,7 +353,11 @@ input[type="file"] {
     display: inline-block;
     line-height: 21px;
 }
-
+#total::before{
+    content: "Total:";
+    font-weight: bold;
+    margin-right: 6px;
+}
 /* ================== BUTTONS ================== */
 button{
     width: 100%;
