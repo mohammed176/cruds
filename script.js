@@ -45,9 +45,14 @@ let searchMode = "title";
 let tmp; 
 let currentUser = null; // <-- Stores the currently logged-in user's name
 
-let products = localStorage.getItem("products") 
-    ? JSON.parse(localStorage.getItem("products")) 
-    : [];
+// --- START CHANGE 1: New Product Storage Structure ---
+let allProductsData = localStorage.getItem("allProductsData") 
+    ? JSON.parse(localStorage.getItem("allProductsData")) 
+    : {};
+
+// 'products' now only holds the list for the current user
+let products = [];
+// --- END CHANGE 1 ---
 
 let users = localStorage.getItem("users")
     ? JSON.parse(localStorage.getItem("users"))
@@ -71,8 +76,7 @@ const translations = {
         "error-password-match": "Passwords do not match",
         "error-username-taken": "Username is already taken",
         "success-account-created": "Account created! Please log in.",
-        "crud-title": "CRUD",
-        "crud-subtitle": "Create Read Update Delete",
+        "crud-title": "Your products management system",
         "logout-btn": "Logout",
         "btn-upload-image": "<i class='fa-solid fa-upload'></i> Upload Image",
         "ph-name": "Name",
@@ -128,7 +132,7 @@ const translations = {
         "error-password-match": "كلمتا المرور غير متطابقتين",
         "error-username-taken": "اسم المستخدم محجوز بالفعل",
         "success-account-created": "تم إنشاء الحساب! يرجى تسجيل الدخول.",
-        "crud-title": "CRUD",
+        "crud-title": "نظام إدارة المنتجات الخاص بك",
         "crud-subtitle": "إنشاء قراءة تحديث حذف",
         "logout-btn": "تسجيل الخروج",
         "btn-upload-image": "<i class='fa-solid fa-upload'></i> تحميل صورة",
@@ -324,6 +328,14 @@ if (loginForm) {
 
         if (isAdmin || validUser) {
             currentUser = username; // Store the user's name
+            
+            // --- START CHANGE 2: Load User-Specific Products on Login ---
+            if (!allProductsData[currentUser]) {
+                allProductsData[currentUser] = []; // Initialize empty array if it's the first login
+            }
+            products = allProductsData[currentUser]; // Set the current products array to the user's data
+            // --- END CHANGE 2 ---
+
             loginContainer.style.display = "none";
             createAccountContainer.style.display = "none";
             mainContainer.style.display = "block";
@@ -346,6 +358,7 @@ if (logoutButton) {
         loginContainer.style.display = "block";
         loginError.textContent = "";
         currentUser = null; // Clear the user
+        products = []; // Clear the current products array
         // Ensure inputs are reset
         clearData();
         // Re-apply language/theme for the login screen
@@ -562,7 +575,11 @@ if (create) {
         }
         clearData();
         
-        localStorage.setItem("products", JSON.stringify(products));
+        // --- START CHANGE 3: Save User-Specific Products ---
+        allProductsData[currentUser] = products; 
+        localStorage.setItem("allProductsData", JSON.stringify(allProductsData));
+        // --- END CHANGE 3 ---
+        
         addData();
     });
 }
@@ -608,7 +625,12 @@ function addData(){
 
 function deleteProduct(i){
     products.splice(i, 1);
-    localStorage.setItem("products", JSON.stringify(products));
+    
+    // --- START CHANGE 4: Save User-Specific Products after Delete ---
+    allProductsData[currentUser] = products; 
+    localStorage.setItem("allProductsData", JSON.stringify(allProductsData));
+    // --- END CHANGE 4 ---
+    
     addData();
     showAlert('success');
 }
@@ -617,7 +639,12 @@ function deleteProduct(i){
 function delete_all(){
     if (confirm(translations[currentLang]["alert-confirm-delete-all"])) {
         products = [];
-        localStorage.setItem("products", JSON.stringify(products));
+        
+        // --- START CHANGE 5: Save User-Specific Products after Delete All ---
+        allProductsData[currentUser] = [];
+        localStorage.setItem("allProductsData", JSON.stringify(allProductsData));
+        // --- END CHANGE 5 ---
+        
         addData();
         showAlert('success');
     }
@@ -712,8 +739,7 @@ function searchData(value) {
     table.innerHTML = tableElements;
 }
 
-// Initial application setup before any login attempt
-// This ensures language/theme/login screen is set up immediately
+// ================== INITIAL SETUP ==================
 function initialSetup() {
     if (mainContainer) mainContainer.style.display = "none";
     if (createAccountContainer) createAccountContainer.style.display = "none";
