@@ -38,6 +38,7 @@ const logoutButton = document.getElementById("logout-button");
 const welcomeMessage = document.getElementById("welcome-message");
 const imageInput = document.getElementById("image");
 const imgPreview = document.getElementById("img-preview");
+const printButton = document.getElementById("print-button");
 
 // ================== APP STATE ==================
 let mode = "create"; 
@@ -77,6 +78,7 @@ const translations = {
         "error-username-taken": "Username is already taken",
         "success-account-created": "Account created! Please log in.",
         "crud-title": "Your products management system",
+        "print-button": "Print Table",
         "logout-btn": "Logout",
         "btn-upload-image": "<i class='fa-solid fa-upload'></i> Upload Image",
         "ph-name": "Name",
@@ -114,7 +116,8 @@ const translations = {
         "alert-warning": "Please check the data ⚠️",
         "alert-info": "This is just information ℹ️",
         "alert-confirm-delete-all": "Are you sure you want to delete all products?",
-        "alert-validation-fail": "Please fill all fields and check count (1-100)"
+        "alert-validation-fail": "Please fill all fields and check count (1-100)",
+        "no-products-to-print": "No products to print"
     },
     ar: { 
         "nav-brand": "تطبيق CRUD",
@@ -124,6 +127,7 @@ const translations = {
         "ph-confirm-password": "تأكيد كلمة المرور",
         "login-title": "تسجيل الدخول",
         "login-btn": "دخول",
+        "print-button": "طباعة الجدول",
         "login-error-msg": "اسم المستخدم أو كلمة المرور غير صحيحة",
         "show-create-account": "ليس لديك حساب؟ قم بإنشاء حساب",
         "create-account-title": "إنشاء حساب",
@@ -171,7 +175,8 @@ const translations = {
         "alert-warning": "يرجى مراجعة البيانات ⚠️",
         "alert-info": "هذه مجرد معلومات ℹ️",
         "alert-confirm-delete-all": "هل أنت متأكد من حذف جميع المنتجات؟",
-        "alert-validation-fail": "يرجى ملء جميع الحقول والتحقق من الكمية (1-100)"
+        "alert-validation-fail": "يرجى ملء جميع الحقول والتحقق من الكمية (1-100)",
+        "no-products-to-print": "لا توجد منتجات للطباعة"
     }
 };
 
@@ -751,3 +756,106 @@ function initialSetup() {
 }
 
 initialSetup();
+// ================== PRINT TABLE FUNCTION ==================
+if (printButton) {
+    printButton.addEventListener("click", printTable);
+}
+
+function printTable() {
+    if (products.length === 0) {
+        showAlert("info", "no-products-to-print");
+        return;
+    }
+
+    // إنشاء صفحة جديدة للطباعة
+    let printWindow = window.open("", "_blank");
+    let lang = currentLang;
+    let dir = lang === "ar" ? "rtl" : "ltr";
+    let themeBg = document.body.classList.contains("dark-mode") ? "#121212" : "#fff";
+    let themeText = document.body.classList.contains("dark-mode") ? "#fff" : "#000";
+    let borderColor = document.body.classList.contains("dark-mode") ? "#333" : "#ccc";
+
+    // بناء محتوى الصفحة للطباعة
+    let html = `
+    <!DOCTYPE html>
+    <html lang="${lang}" dir="${dir}">
+    <head>
+        <meta charset="UTF-8">
+        <title>${translations[lang]["crud-title"]}</title>
+        <style>
+            body {
+                background: ${themeBg};
+                color: ${themeText};
+                font-family: 'Segoe UI', Tahoma, sans-serif;
+                text-align: center;
+                padding: 20px;
+            }
+            h2 {
+                margin-bottom: 20px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 10px;
+            }
+            th, td {
+                border: 1px solid ${borderColor};
+                padding: 8px;
+                font-size: 14px;
+            }
+            th {
+                background: ${document.body.classList.contains("dark-mode") ? "#222" : "#eee"};
+            }
+            img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>${translations[lang]["crud-title"]}</h2>
+        <h4>${translations[lang]["welcome-user"]} ${currentUser}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>${translations[lang]["th-id"]}</th>
+                    <th>${translations[lang]["th-image"]}</th>
+                    <th>${translations[lang]["th-title"]}</th>
+                    <th>${translations[lang]["th-price"]}</th>
+                    <th>${translations[lang]["th-tax"]}</th>
+                    <th>${translations[lang]["th-adds"]}</th>
+                    <th>${translations[lang]["th-discount"]}</th>
+                    <th>${translations[lang]["th-total"]}</th>
+                    <th>${translations[lang]["th-category"]}</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${products.map((p, i) => `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td><img src="${p.image || ''}" alt=""></td>
+                        <td>${p.title}</td>
+                        <td>${p.price}</td>
+                        <td>${p.tax}</td>
+                        <td>${p.adds}</td>
+                        <td>${p.discount}</td>
+                        <td>${p.total}</td>
+                        <td>${p.category}</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        <script>
+            window.print();
+            window.onafterprint = () => window.close();
+        </script>
+    </body>
+    </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+}
